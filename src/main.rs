@@ -50,9 +50,9 @@ fn main() {
 //          ..default()
 //      })
 //      .add_plugin(LogDiagnosticsPlugin::default())
-//      .add_plugin(FrameTimeDiagnosticsPlugin::default())
+        .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_plugins(DefaultPlugins)
-//      .add_plugin(WorldInspectorPlugin::new())
+        .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(audio::GameAudioPlugin)
         .add_plugin(assets::AssetsPlugin)
         .add_plugin(banter::BanterPlugin)
@@ -87,7 +87,7 @@ fn main() {
 fn window_settings(mut windows: ResMut<Windows>){
     for mut window in windows.iter_mut() {
         window.set_title(String::from("USAFL Scouting Combine XLV"));
-        window.set_mode(WindowMode::BorderlessFullscreen)
+        window.set_mode(WindowMode::Windowed)
     }
 }
 
