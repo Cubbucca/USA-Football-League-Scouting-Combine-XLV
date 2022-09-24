@@ -127,7 +127,7 @@ fn play_cutscene(
 
     cutscene_state.camera_speed = 2.0;
     cutscene_state.waiting_on_input = true;
-    let text_speed = 0.10;
+    let text_speed = 0.2;
 
     if let Some(current) = cutscene_state.current {
         *ingame_ui_textbox = ingame_ui::TextBox::default(); // clear out any banter or commentary
@@ -397,7 +397,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Hello! I'm Bill.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -408,7 +408,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "and I'm Will!".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_idle.clone()); 
@@ -418,7 +418,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "and we're here live from the USAFL Scouting Combine XLV in Indianapolis!".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -428,7 +428,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "it's very exciting!".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -438,7 +438,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "I've been looking forward to this event all year.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -448,7 +448,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "ha ha ha, ..yeah.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -458,7 +458,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "well, if you're just joining in at home and have no idea what's going on..".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -468,7 +468,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "The USAFL Scouting Combine is an annual, week-long showcase where athletes perform mental and physical trials to potentially be drafted on an USAFL team.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -478,7 +478,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "We're already a couple days in and most of the crowd-favorite events have passed, but everyone's pumped for this year's new challenge.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_idle.clone()); 
@@ -488,7 +488,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "The Combine Combine Challenge!".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_idle.clone()); 
@@ -498,7 +498,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "It's very exciting.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -508,7 +508,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "very exciting".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -518,7 +518,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Bill, I lost my notes, can you tell our viewers what it's all about?".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -528,7 +528,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Ha ha, that keeps happening why is that? ha ha".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -538,7 +538,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "The challenge is for players to score as many touchdowns as they can while navigating a corn maze".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -551,7 +551,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "As you can see the field is set.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -561,7 +561,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "We've been generously donated 1,000 acres worth of corn.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -571,7 +571,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "And between attempts we have a team of 200 volunteers meticulously re-constructing the mazes.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -581,7 +581,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "This ensures each player has the same exact maze so there aren't any unfair advantages.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -597,7 +597,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "That seems excessive.. that's like a lot of corn.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -607,7 +607,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Ha ha.. yeah".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -617,7 +617,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Let's talk more about how this works".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -631,7 +631,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Players will start on one side of the field and a kicker will launch a ball into the maze.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -646,7 +646,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "The player will navigate the maze, find the ball and score a point on the other side.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -656,7 +656,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Once they score, a ball will be launched from the opposite side into the maze.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -666,7 +666,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "And the player will have to turn back, find the ball and score a touchdown on the opposite side.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -681,7 +681,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "And the cycle just repeats from there.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -691,7 +691,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "That's a lot of running.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -701,7 +701,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Yeah..".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -715,7 +715,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "In the maze, we have seasoned USAFL players ready to chase and tackle the player.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -725,7 +725,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Players won't be able to run as fast if they have one of these professionals holding them down.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -735,7 +735,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "And if they get tackled, they'll have to go back to the goal line.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -749,7 +749,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "I think that about covers everything.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -759,7 +759,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "What about the combine?".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -769,7 +769,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Oh! Right! The combine!".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -783,7 +783,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "While the player is attempting to score, a combine will be harvesting the maze.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -793,7 +793,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Don't worry though, we have a professional driver in the combine.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -803,7 +803,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Players are equipped with special padding that can't be sliced by the combine's blades. They should just safely bounce away.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -817,7 +817,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Bill, this seems really dangerous.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -827,7 +827,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "We have an ambulance on site. And the players have signed waivers.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -837,7 +837,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "...".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::None,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -847,7 +847,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "The round ends once the combine has completely harvested the maze.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -857,7 +857,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Then, we'll have our team re-plant the maze for the next round.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -867,7 +867,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "They just... plant that right into the astroturf?".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -877,7 +877,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Yeah.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -887,7 +887,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "We know we have players with different preferences on how to compete.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -897,7 +897,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Players can use the WASD keys, the Arrow keys or ZQSD keys to navigate the maze.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -907,7 +907,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "...".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::None,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -917,7 +917,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Bill.. what are you talking about?".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -927,7 +927,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Ha ha, Will, football is played a little different these days.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -937,7 +937,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "I think that about covers everything though, right?".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -947,7 +947,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Actually, this always bugged me.. why is it called \"Combine\"?".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -957,7 +957,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "OH, that's just because there used to be several scouting showcases across the country.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -967,7 +967,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "and then one year they decided to combine them into one.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -977,7 +977,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "...and so instead of calling it the \"Scouting Showcase\", they called it.. \"Combine\"?".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Will,
                         });
                         bill_animation = Some(game_assets.host_look_right.clone()); 
@@ -987,7 +987,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "ha... yeah.. I uhh.. that's what it's called, man, I don't know.".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_look_right_talk.clone()); 
@@ -997,7 +997,7 @@ fn play_cutscene(
                         textbox.queued_text = Some(TextBoxText {
                             text: "Oh, the kicker is ready, I think it's about to begin. Let's watch!".to_string(),
                             speed: text_speed,
-                                    auto: false,
+                                    auto: true,
                                     speaking: DisplayCharacter::Bill,
                         });
                         bill_animation = Some(game_assets.host_talk.clone()); 
@@ -1909,8 +1909,6 @@ fn handle_input(
     mut cutscene_state: ResMut<CutsceneState>,
     time: Res<Time>,
 ) {
-    if !cutscene_state.waiting_on_input { return; }
-
     cutscene_state.input_cooldown -= time.delta_seconds();     
     cutscene_state.input_cooldown = cutscene_state.input_cooldown.clamp(-3.0, 3.0);
     if cutscene_state.input_cooldown > 0.0 { return; }
