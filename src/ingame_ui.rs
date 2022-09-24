@@ -84,7 +84,7 @@ fn setup(
                     visibility: Visibility {
                         is_visible: false
                     },
-                    color: Color::rgb(0.65, 0.65, 0.65).into(),
+                    color: Color::rgba(0.65, 0.65, 0.65, 0.4).into(),
                     ..Default::default()
                 })
                 .insert(OuterTextBoxContainer)
@@ -98,7 +98,7 @@ fn setup(
                                 overflow: Overflow::Hidden,
                                 ..Default::default()
                             },
-                            color: Color::hex("2d3b95").unwrap().into(),
+                            color: Color::rgba(0.17,0.23,0.58,0.4).into(),
                             ..Default::default()
                         })
                         .insert(TextContainerMarker);

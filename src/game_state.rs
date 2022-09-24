@@ -77,7 +77,7 @@ fn handle_touchdown_event(
     mut game_state: ResMut<GameState>,
     mut football_launch_event_writer: EventWriter<football::LaunchFootballEvent>,
 ) {
-    for event in touchdown_event_reader.iter() {
+    for _event in touchdown_event_reader.iter() {
         game_state.score += 100;
         game_state.touchdown_on_leftside = !game_state.touchdown_on_leftside;
         football_launch_event_writer.send(football::LaunchFootballEvent);

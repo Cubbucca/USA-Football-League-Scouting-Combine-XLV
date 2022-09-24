@@ -5,7 +5,7 @@ use crate::{
 };
 use std::mem;
 use bevy::prelude::*;
-use rand::Rng;
+//use rand::Rng;
 use leafwing_input_manager::prelude::ActionState;
 use leafwing_input_manager::InputManagerBundle;
 
@@ -97,10 +97,10 @@ fn play_cutscene(
     mut assets_handler: asset_loading::AssetsHandler,
     mut game_assets: ResMut<GameAssets>,
     mut game_state: ResMut<game_state::GameState>,
-    mut will_animation_link: Query<&AnimationLink, With<other_persons::WillPerson>>,
-    mut bill_animation_link: Query<&AnimationLink, With<other_persons::BillPerson>>,
+    will_animation_link: Query<&AnimationLink, With<other_persons::WillPerson>>,
+    bill_animation_link: Query<&AnimationLink, With<other_persons::BillPerson>>,
     mut animations: Query<&mut AnimationPlayer>,
-    mut football_launch_event_writer: EventWriter<football::LaunchFootballEvent>,
+    //mut football_launch_event_writer: EventWriter<football::LaunchFootballEvent>,
     mut ingame_ui_textbox: ResMut<ingame_ui::TextBox>,
     mut audio: GameAudio,
 ) {
@@ -1690,7 +1690,7 @@ fn play_cutscene(
 }
 
 fn move_camera(
-    mut cutscene_state: ResMut<CutsceneState>,
+    cutscene_state: ResMut<CutsceneState>,
     mut camera: Query<&mut Transform, With<game_camera::PanOrbitCamera>>,
     time: Res<Time>
 ) {
@@ -1711,9 +1711,9 @@ fn move_camera(
 
 fn setup_cutscene(
     mut commands: Commands,
-    game_assets: Res<GameAssets>,
-    mut game_state: ResMut<game_state::GameState>,
-    text_scaler: text_size::TextScaler,
+    _game_assets: Res<GameAssets>,
+    _game_state: ResMut<game_state::GameState>,
+    _text_scaler: text_size::TextScaler,
 ) {
     commands
         .spawn_bundle(InputManagerBundle {
@@ -1722,7 +1722,7 @@ fn setup_cutscene(
         })
         .insert(CleanupMarker);
 
-    let scale = (text_scaler.window_size.width * 0.1) / ingame::RENDER_TEXTURE_SIZE as f32;
+    //let scale = (text_scaler.window_size.width * 0.1) / ingame::RENDER_TEXTURE_SIZE as f32;
 
     commands
         .spawn_bundle(NodeBundle {
@@ -1742,7 +1742,7 @@ fn setup_cutscene(
                         border: UiRect::all(Val::Px(2.0)),
                         ..Default::default()
                     },
-                    color: Color::rgb(0.65, 0.65, 0.65).into(),
+                    color: Color::rgba(0.65, 0.65, 0.65, 0.4).into(),
                     ..Default::default()
                 })
                 .insert(CutsceneTextBoxContainer)
@@ -1756,7 +1756,8 @@ fn setup_cutscene(
                                 overflow: Overflow::Hidden,
                                 ..Default::default()
                             },
-                            color: Color::hex("2d3b95").unwrap().into(),
+                            color: Color::rgba(0.17,0.23,0.58,0.4).into(),
+
                             ..Default::default()
                         })
                         .insert(CutsceneTextContainerMarker);

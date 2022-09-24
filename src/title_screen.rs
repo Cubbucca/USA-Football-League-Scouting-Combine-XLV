@@ -85,10 +85,10 @@ pub fn load(
 fn setup(
     mut commands: Commands,
     game_assets: Res<GameAssets>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut images: ResMut<Assets<Image>>,
+    mut _meshes: ResMut<Assets<Mesh>>,
+    mut _images: ResMut<Assets<Image>>,
     mut audio: GameAudio,
-    mut texture_materials: ResMut<Assets<shaders::TextureMaterial>>,
+    mut _texture_materials: ResMut<Assets<shaders::TextureMaterial>>,
     mut clear_color: ResMut<ClearColor>,
     mut banter_state: ResMut<banter::BanterState>,
     mut cutscene_state: ResMut<cutscene::CutsceneState>,
@@ -307,7 +307,7 @@ fn update_menu_buttons(
 
     let action_state = action_state.single();
     let number_of_buttons = buttons.iter().count();
-    let mut pressed_button = action_state.pressed(MenuAction::Select);
+    let pressed_button = action_state.pressed(MenuAction::Select);
 
     if action_state.just_pressed(MenuAction::Up) {
         audio.play_sfx(&game_assets.blip);
