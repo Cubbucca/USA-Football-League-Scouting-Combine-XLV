@@ -1,55 +1,55 @@
 #![windows_subsystem = "windows"]
 
-use bevy::prelude::*;
-use bevy::asset::AssetServerSettings;
 use bevy::app::AppExit;
+use bevy::asset::AssetServerSettings;
+use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
+use bevy::prelude::*;
 use bevy::window::WindowMode;
 use bevy_inspector_egui::WorldInspectorPlugin;
-use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 
 mod asset_loading;
 mod assets;
-mod banter;
 mod audio;
-mod cutscene;
-mod splash;
+mod banter;
 mod billboard;
 mod collision;
 mod combine;
 mod component_adder;
+mod cutscene;
 mod direction;
 mod enemy;
 mod football;
-mod level_over;
-mod game_controller;
 mod game_camera;
+mod game_controller;
 mod game_state;
 mod ingame;
 mod ingame_ui;
+mod level_over;
 mod maze;
 mod menus;
-mod player;
 mod options;
 mod other_persons;
-mod title_screen;
+mod player;
 mod shaders;
+mod splash;
+mod title_screen;
 mod ui;
 mod wasm;
 
-const LEFT_GOAL:f32 = -38.5;
-const RIGHT_GOAL:f32 = 37.5;
-const LEFT_END:f32 = -47.5;
-const RIGHT_END:f32 = 47.0;
-const BOTTOM_END:f32 = -19.471;
-const TOP_END:f32 = 20.471;
+const LEFT_GOAL: f32 = -38.5;
+const RIGHT_GOAL: f32 = 37.5;
+const LEFT_END: f32 = -47.5;
+const RIGHT_END: f32 = 47.0;
+const BOTTOM_END: f32 = -19.471;
+const TOP_END: f32 = 20.471;
 
 fn main() {
     App::new()
-//      .insert_resource(AssetServerSettings {
-//          watch_for_changes: true,
-//          ..default()
-//      })
-//      .add_plugin(LogDiagnosticsPlugin::default())
+        //      .insert_resource(AssetServerSettings {
+        //          watch_for_changes: true,
+        //          ..default()
+        //      })
+        //      .add_plugin(LogDiagnosticsPlugin::default())
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_plugins(DefaultPlugins)
         .add_plugin(WorldInspectorPlugin::new())
@@ -80,11 +80,11 @@ fn main() {
         .add_system(window_settings)
         .add_state(AppState::Initial)
         .add_system_set(SystemSet::on_update(AppState::Initial).with_system(bootstrap))
-//        .add_system(debug)
+        //        .add_system(debug)
         .run();
 }
 
-fn window_settings(mut windows: ResMut<Windows>){
+fn window_settings(mut windows: ResMut<Windows>) {
     for mut window in windows.iter_mut() {
         window.set_title(String::from("USAFL Scouting Combine XLV"));
         window.set_mode(WindowMode::Windowed)
@@ -120,15 +120,15 @@ fn bootstrap(
     mut audio: audio::GameAudio,
 ) {
     audio.set_volume();
-    clear_color.0 = Color::hex("000000").unwrap(); 
+    clear_color.0 = Color::hex("000000").unwrap();
 
     assets_handler.load(AppState::Splash, &mut game_assets, &game_state);
-//    assets_handler.load(AppState::InGame, &mut game_assets, &game_state);
+    //    assets_handler.load(AppState::InGame, &mut game_assets, &game_state);
 }
 
 fn debug(
     mut commands: Commands,
-    keys: Res<Input<KeyCode>>, 
+    keys: Res<Input<KeyCode>>,
     game_state: ResMut<game_state::GameState>,
     mut exit: ResMut<Events<AppExit>>,
     mut assets_handler: asset_loading::AssetsHandler,
@@ -139,7 +139,7 @@ fn debug(
     corn: Query<Entity, With<maze::CornStalk>>,
     players: Query<Entity, With<player::Player>>,
     mut cutscene_state: ResMut<cutscene::CutsceneState>,
- ) {
+) {
     if keys.just_pressed(KeyCode::Q) {
         exit.send(AppExit);
     }
@@ -169,42 +169,46 @@ fn debug(
     }
 
     if keys.just_pressed(KeyCode::T) {
-        let texts = vec!(ingame_ui::TextBoxText {
-            text: "Blah blah blah".to_string(),
-            speed: 1.01,
-            character: ingame_ui::DisplayCharacter::Will,
-            animation_clip: game_assets.host_talk.clone(),
-            after_text_displayed_delay: 1.0,
-        }, ingame_ui::TextBoxText {
-            text: "Ok ok ok?".to_string(),
-            speed: 0.5,
-            character: ingame_ui::DisplayCharacter::Bill,
-            animation_clip: game_assets.host_look_left.clone(),
-            after_text_displayed_delay: 1.0,
-        }, ingame_ui::TextBoxText {
-            text: "no no no".to_string(),
-            speed: 0.5,
-            after_text_displayed_delay: 1.0,
-            character: ingame_ui::DisplayCharacter::Will,
-            animation_clip: game_assets.host_look_left_talk.clone(),
-        }, ingame_ui::TextBoxText {
-            text: "yes yes yes".to_string(),
-            speed: 0.5,
-            after_text_displayed_delay: 1.0,
-            character: ingame_ui::DisplayCharacter::Will,
-            animation_clip: game_assets.host_look_right.clone(),
-        }, ingame_ui::TextBoxText {
-            text: "yo word word".to_string(),
-            speed: 0.5,
-            after_text_displayed_delay: 1.0,
-            character: ingame_ui::DisplayCharacter::Bill,
-            animation_clip: game_assets.host_look_right_talk.clone(),
-        });
+        let texts = vec![
+            ingame_ui::TextBoxText {
+                text: "Blah blah blah".to_string(),
+                speed: 1.01,
+                character: ingame_ui::DisplayCharacter::Will,
+                animation_clip: game_assets.host_talk.clone(),
+                after_text_displayed_delay: 1.0,
+            },
+            ingame_ui::TextBoxText {
+                text: "Ok ok ok?".to_string(),
+                speed: 0.5,
+                character: ingame_ui::DisplayCharacter::Bill,
+                animation_clip: game_assets.host_look_left.clone(),
+                after_text_displayed_delay: 1.0,
+            },
+            ingame_ui::TextBoxText {
+                text: "no no no".to_string(),
+                speed: 0.5,
+                after_text_displayed_delay: 1.0,
+                character: ingame_ui::DisplayCharacter::Will,
+                animation_clip: game_assets.host_look_left_talk.clone(),
+            },
+            ingame_ui::TextBoxText {
+                text: "yes yes yes".to_string(),
+                speed: 0.5,
+                after_text_displayed_delay: 1.0,
+                character: ingame_ui::DisplayCharacter::Will,
+                animation_clip: game_assets.host_look_right.clone(),
+            },
+            ingame_ui::TextBoxText {
+                text: "yo word word".to_string(),
+                speed: 0.5,
+                after_text_displayed_delay: 1.0,
+                character: ingame_ui::DisplayCharacter::Bill,
+                animation_clip: game_assets.host_look_right_talk.clone(),
+            },
+        ];
 
         println!("Sent texts");
-        textbox_event_writer.send(ingame_ui::SetTextBoxEvent {
-            texts
-        });
+        textbox_event_writer.send(ingame_ui::SetTextBoxEvent { texts });
     }
 }
 

@@ -1,6 +1,6 @@
 use crate::{
-    asset_loading, assets::GameAssets, cleanup, game_controller, AppState, shaders,
-    audio::GameAudio, menus, ui::text_size, game_state, cutscene, banter,
+    asset_loading, assets::GameAssets, audio::GameAudio, banter, cleanup, cutscene,
+    game_controller, game_state, menus, shaders, ui::text_size, AppState,
 };
 use bevy::app::AppExit;
 use bevy::core_pipeline::clear_color::ClearColorConfig;
@@ -16,7 +16,9 @@ impl Plugin for TitlePlugin {
             .add_system_set(
                 SystemSet::on_update(AppState::TitleScreen)
                     .with_system(update_menu_buttons.after(handle_controllers))
-                    .with_system(handle_controllers.after(game_controller::store_controller_inputs))
+                    .with_system(
+                        handle_controllers.after(game_controller::store_controller_inputs),
+                    ),
             )
             .add_system_set(
                 SystemSet::on_exit(AppState::TitleScreen).with_system(cleanup::<CleanupMarker>),
@@ -97,30 +99,32 @@ fn setup(
     cutscene_state.init(cutscene::Cutscene::Intro);
     banter_state.reset(&game_assets);
 
-    clear_color.0 = Color::hex("00068a").unwrap(); 
+    clear_color.0 = Color::hex("00068a").unwrap();
     let image_height = 1280.0;
     let scale = (text_scaler.window_size.height * 0.8) / image_height;
-    commands.spawn_bundle(Camera2dBundle {
-        camera_2d: Camera2d {
-            clear_color: ClearColorConfig::None,
+    commands
+        .spawn_bundle(Camera2dBundle {
+            camera_2d: Camera2d {
+                clear_color: ClearColorConfig::None,
+                ..default()
+            },
+            camera: Camera {
+                priority: 1,
+                ..default()
+            },
             ..default()
-        },
-        camera: Camera {
-            priority: 1,
-            ..default()
-        },
-        ..default()
-    })
-    .insert(CleanupMarker);
-      commands.spawn_bundle(SpriteBundle {
-          transform: {
-              let height = (text_scaler.window_size.height / 2.0) * 0.224;
-              let mut t = Transform::from_translation(Vec3::new(0.0, height, 0.0));
-              t.apply_non_uniform_scale(Vec3::new(scale, scale, scale));
-              t
-          },
-          texture: game_assets.title_screen_logo.image.clone(),
-          ..Default::default()
+        })
+        .insert(CleanupMarker);
+    commands
+        .spawn_bundle(SpriteBundle {
+            transform: {
+                let height = (text_scaler.window_size.height / 2.0) * 0.224;
+                let mut t = Transform::from_translation(Vec3::new(0.0, height, 0.0));
+                t.apply_non_uniform_scale(Vec3::new(scale, scale, scale));
+                t
+            },
+            texture: game_assets.title_screen_logo.image.clone(),
+            ..Default::default()
         })
         .insert(CleanupMarker);
 
@@ -131,48 +135,47 @@ fn setup(
         })
         .insert(CleanupMarker);
 
-//  commands
-//      .spawn_bundle(MaterialMeshBundle {
-//          transform: {
-//              let mut transform = Transform::from_scale(Vec3::splat(10.0));
-//              transform.translation.z = 0.1;
+    //  commands
+    //      .spawn_bundle(MaterialMeshBundle {
+    //          transform: {
+    //              let mut transform = Transform::from_scale(Vec3::splat(10.0));
+    //              transform.translation.z = 0.1;
 
-//              transform
-//          },
-//          material: texture_materials.add(shaders::TextureMaterial {
-//              env_texture: Some(game_assets.title_screen_logo.image.clone()),
-//              color: Color::rgb(1.0, 1.0, 1.0),
-//              time: 0.0,
-//              x_scroll_speed: 0.1,
-//              y_scroll_speed: 0.4,
-//              scale: 0.2,
-//          }),
-//          mesh: meshes.add(Mesh::from(shape::Plane::default())),
-//          ..Default::default()
-//      })
-//      .insert(CleanupMarker);
+    //              transform
+    //          },
+    //          material: texture_materials.add(shaders::TextureMaterial {
+    //              env_texture: Some(game_assets.title_screen_logo.image.clone()),
+    //              color: Color::rgb(1.0, 1.0, 1.0),
+    //              time: 0.0,
+    //              x_scroll_speed: 0.1,
+    //              y_scroll_speed: 0.4,
+    //              scale: 0.2,
+    //          }),
+    //          mesh: meshes.add(Mesh::from(shape::Plane::default())),
+    //          ..Default::default()
+    //      })
+    //      .insert(CleanupMarker);
 
-//  commands
-//      .spawn_bundle(MaterialMeshBundle {
-//          transform: {
-//              let mut transform = Transform::from_scale(Vec3::splat(12.0));
-//              transform.translation.z = 0.4;
+    //  commands
+    //      .spawn_bundle(MaterialMeshBundle {
+    //          transform: {
+    //              let mut transform = Transform::from_scale(Vec3::splat(12.0));
+    //              transform.translation.z = 0.4;
 
-//              transform
-//          },
-//          material: texture_materials.add(shaders::TextureMaterial {
-//              env_texture: Some(game_assets.title_screen_logo.image.clone()),
-//              color: Color::rgb(1.0, 1.0, 1.0),
-//              time: 0.0,
-//              x_scroll_speed: 0.2,
-//              y_scroll_speed: 0.5,
-//              scale: 0.3,
-//          }),
-//          mesh: meshes.add(Mesh::from(shape::Plane::default())),
-//          ..Default::default()
-//      })
-//      .insert(CleanupMarker);
-
+    //              transform
+    //          },
+    //          material: texture_materials.add(shaders::TextureMaterial {
+    //              env_texture: Some(game_assets.title_screen_logo.image.clone()),
+    //              color: Color::rgb(1.0, 1.0, 1.0),
+    //              time: 0.0,
+    //              x_scroll_speed: 0.2,
+    //              y_scroll_speed: 0.5,
+    //              scale: 0.3,
+    //          }),
+    //          mesh: meshes.add(Mesh::from(shape::Plane::default())),
+    //          ..Default::default()
+    //      })
+    //      .insert(CleanupMarker);
 
     commands
         .spawn_bundle(Camera3dBundle {
@@ -199,7 +202,7 @@ fn setup(
                     font: game_assets.font.clone(),
                     font_size: text_scaler.scale(menus::BY_LINE_FONT_SIZE),
                     color: Color::WHITE,
-                }
+                },
             ),
             ..Default::default()
         })
@@ -247,7 +250,7 @@ fn setup(
                                 font: game_assets.font.clone(),
                                 font_size: text_scaler.scale(menus::BUTTON_LABEL_FONT_SIZE),
                                 color: Color::WHITE,
-                            }
+                            },
                         ),
                         ..Default::default()
                     });
@@ -275,7 +278,7 @@ fn setup(
                                 font: game_assets.font.clone(),
                                 font_size: text_scaler.scale(menus::BUTTON_LABEL_FONT_SIZE),
                                 color: Color::WHITE,
-                            }
+                            },
                         ),
                         ..Default::default()
                     });
@@ -372,4 +375,3 @@ fn handle_controllers(
         }
     }
 }
-

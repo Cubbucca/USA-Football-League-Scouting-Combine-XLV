@@ -1,12 +1,10 @@
-use crate::{collision, maze, combine, assets::GameAssets, ingame, other_persons, game_state};
-use bevy::prelude::*;
+use crate::{assets::GameAssets, collision, combine, game_state, ingame, maze, other_persons};
 use bevy::gltf::Gltf;
+use bevy::prelude::*;
 use bevy::render::primitives::Aabb;
-use uuid::Uuid;
+use bevy::render::view::RenderLayers;
 use std::f32::consts::{FRAC_PI_2, TAU};
-use bevy::render::{
-    view::RenderLayers,
-};
+use uuid::Uuid;
 
 pub struct ComponentAdderPlugin;
 impl Plugin for ComponentAdderPlugin {
@@ -54,22 +52,18 @@ fn add_components(
     for (entity, aabb, global_transform, mut name, mut visibility) in items.iter_mut() {
         let mut change_name = false;
         if name.as_str().contains("dynamic_collide") {
-            commands
-                .entity(entity)
-                .insert(collision::DynamicCollidable);
+            commands.entity(entity).insert(collision::DynamicCollidable);
 
             change_name = true;
         }
         if name.as_str().contains("collidable") {
             let matrix = global_transform.compute_matrix();
-            commands
-                .entity(entity)
-                .insert(collision::Collidable {
-                    aabb: collision::WorldAabb {
-                        min: matrix.transform_point3(aabb.min().into()),
-                        max: matrix.transform_point3(aabb.max().into()),
-                    },
-                });
+            commands.entity(entity).insert(collision::Collidable {
+                aabb: collision::WorldAabb {
+                    min: matrix.transform_point3(aabb.min().into()),
+                    max: matrix.transform_point3(aabb.max().into()),
+                },
+            });
 
             change_name = true;
         }
@@ -77,15 +71,13 @@ fn add_components(
         if name.as_str().contains("maze") {
             if !game_state.corn_spawned {
                 let matrix = global_transform.compute_matrix();
-                commands
-                    .entity(entity)
-                    .insert(maze::MazeMarker {
-                        spawned: false,
-                        aabb: collision::WorldAabb {
-                            min: matrix.transform_point3(aabb.min().into()),
-                            max: matrix.transform_point3(aabb.max().into()),
-                        },
-                    });
+                commands.entity(entity).insert(maze::MazeMarker {
+                    spawned: false,
+                    aabb: collision::WorldAabb {
+                        min: matrix.transform_point3(aabb.min().into()),
+                        max: matrix.transform_point3(aabb.max().into()),
+                    },
+                });
 
                 println!("found maze");
             }
@@ -95,9 +87,7 @@ fn add_components(
 
         if name.as_str().contains("combine_blade") {
             let matrix = global_transform.compute_matrix();
-            commands
-                .entity(entity)
-                .insert(combine::CombineBlade);
+            commands.entity(entity).insert(combine::CombineBlade);
             visibility.is_visible = false;
 
             println!("found combine blade");
@@ -107,21 +97,22 @@ fn add_components(
         if name.as_str().contains("bill") {
             if let Some(gltf) = assets_gltf.get(&game_assets.bill_person.clone()) {
                 let matrix = global_transform.compute_matrix();
-                commands.spawn_bundle(SceneBundle {
-                            scene: gltf.scenes[0].clone(),
-                            transform: {
-                                let mut t = Transform::from_translation(matrix.transform_point3(aabb.center.into()));
-                                t.translation.y = 0.0;
-                                t.rotation = Quat::from_rotation_y(TAU * 0.5);
-                                t
-                            },
-                            ..default()
-                        })
-                        .insert(other_persons::BillPerson)
-                        .insert(AnimationLink {
-                            entity: None
-                        })
-                        .insert(ingame::CleanupMarker);
+                commands
+                    .spawn_bundle(SceneBundle {
+                        scene: gltf.scenes[0].clone(),
+                        transform: {
+                            let mut t = Transform::from_translation(
+                                matrix.transform_point3(aabb.center.into()),
+                            );
+                            t.translation.y = 0.0;
+                            t.rotation = Quat::from_rotation_y(TAU * 0.5);
+                            t
+                        },
+                        ..default()
+                    })
+                    .insert(other_persons::BillPerson)
+                    .insert(AnimationLink { entity: None })
+                    .insert(ingame::CleanupMarker);
                 visibility.is_visible = false;
             }
 
@@ -133,22 +124,23 @@ fn add_components(
                 let matrix = global_transform.compute_matrix();
                 let first_pass_layer = RenderLayers::layer(1);
 
-                commands.spawn_bundle(SceneBundle {
-                            scene: gltf.scenes[0].clone(),
-                            transform: {
-                                let mut t = Transform::from_translation(matrix.transform_point3(aabb.center.into()));
-                                t.translation.y = 0.0;
-                                t.rotation = Quat::from_rotation_y(TAU * 0.5);
-                                t
-                            },
-                            ..default()
-                        })
-                        .insert(other_persons::WillPerson)
-                        .insert(first_pass_layer)
-                        .insert(AnimationLink {
-                            entity: None
-                        })
-                        .insert(ingame::CleanupMarker);
+                commands
+                    .spawn_bundle(SceneBundle {
+                        scene: gltf.scenes[0].clone(),
+                        transform: {
+                            let mut t = Transform::from_translation(
+                                matrix.transform_point3(aabb.center.into()),
+                            );
+                            t.translation.y = 0.0;
+                            t.rotation = Quat::from_rotation_y(TAU * 0.5);
+                            t
+                        },
+                        ..default()
+                    })
+                    .insert(other_persons::WillPerson)
+                    .insert(first_pass_layer)
+                    .insert(AnimationLink { entity: None })
+                    .insert(ingame::CleanupMarker);
                 visibility.is_visible = false;
             }
 
@@ -165,7 +157,7 @@ fn add_components(
 
 #[derive(Component)]
 pub struct AnimationLink {
-    pub entity: Option::<Entity>,
+    pub entity: Option<Entity>,
 }
 
 fn link_animations(

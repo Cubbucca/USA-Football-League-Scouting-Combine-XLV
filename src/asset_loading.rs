@@ -1,4 +1,4 @@
-use crate::{assets::GameAssets, AppState, title_screen, ingame, game_state, splash};
+use crate::{assets::GameAssets, game_state, ingame, splash, title_screen, AppState};
 use bevy::{asset::Asset, ecs::system::SystemParam, gltf::Gltf, prelude::*};
 use bevy_kira_audio::AudioSource;
 use std::marker::PhantomData;
@@ -58,8 +58,12 @@ impl<'w, 's> AssetsHandler<'w, 's> {
             .push(asset.clone_untyped());
     }
 
-    pub fn load(&mut self, next_state: AppState, game_assets: &mut ResMut<GameAssets>,
-                game_state: &ResMut<game_state::GameState>) {
+    pub fn load(
+        &mut self,
+        next_state: AppState,
+        game_assets: &mut ResMut<GameAssets>,
+        game_state: &ResMut<game_state::GameState>,
+    ) {
         self.queue_assets_for_state(&next_state, game_assets, game_state);
         self.next_state.state = next_state;
         self.state.set(AppState::Loading).unwrap();
@@ -89,7 +93,11 @@ impl<'w, 's> AssetsHandler<'w, 's> {
         *handle = self.meshes.add(mesh);
     }
 
-    pub fn add_standard_material(&mut self, handle: &mut Handle<StandardMaterial>, material: StandardMaterial) {
+    pub fn add_standard_material(
+        &mut self,
+        handle: &mut Handle<StandardMaterial>,
+        material: StandardMaterial,
+    ) {
         *handle = self.materials.add(material);
     }
 
@@ -106,9 +114,12 @@ impl<'w, 's> AssetsHandler<'w, 's> {
         });
     }
 
-    fn queue_assets_for_state(&mut self, state: &AppState, 
-                              game_assets: &mut ResMut<GameAssets>, 
-                              game_state: &ResMut<game_state::GameState>) {
+    fn queue_assets_for_state(
+        &mut self,
+        state: &AppState,
+        game_assets: &mut ResMut<GameAssets>,
+        game_state: &ResMut<game_state::GameState>,
+    ) {
         match state {
             AppState::Splash => splash::load(self, game_assets),
             AppState::TitleScreen => title_screen::load(self, game_assets),

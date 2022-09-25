@@ -1,19 +1,18 @@
 use crate::{
-    assets::GameAssets, cleanup, game_state, menus, AppState, ui::text_size, ingame, other_persons,
-    component_adder::AnimationLink, game_camera, ingame_ui, title_screen::MenuAction, LEFT_GOAL, football,
-    asset_loading, cutscene, assets,
+    asset_loading, assets, assets::GameAssets, cleanup, component_adder::AnimationLink, cutscene,
+    football, game_camera, game_state, ingame, ingame_ui, menus, other_persons,
+    title_screen::MenuAction, ui::text_size, AppState, LEFT_GOAL,
 };
 use bevy::prelude::*;
 
 pub struct LevelOverPlugin;
 impl Plugin for LevelOverPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(SystemSet::on_update(AppState::LevelOver)
-           .with_system(load_next_level)
-        )
-        .add_system_set(SystemSet::on_enter(AppState::LevelOver)
-           .with_system(cleanup::<game_state::LevelOverCleanupMarker>)
-        );
+        app.add_system_set(SystemSet::on_update(AppState::LevelOver).with_system(load_next_level))
+            .add_system_set(
+                SystemSet::on_enter(AppState::LevelOver)
+                    .with_system(cleanup::<game_state::LevelOverCleanupMarker>),
+            );
     }
 }
 

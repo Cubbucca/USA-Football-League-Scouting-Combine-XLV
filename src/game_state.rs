@@ -1,4 +1,4 @@
-use crate::{AppState, football, player};
+use crate::{football, player, AppState};
 use bevy::prelude::*;
 
 pub struct GameStatePlugin;
@@ -9,7 +9,7 @@ impl Plugin for GameStatePlugin {
             .add_system_set(
                 SystemSet::on_update(AppState::InGame)
                     .with_system(handle_touchdown_event.after(player::check_for_touchdown))
-                    .with_system(placeholder)
+                    .with_system(placeholder),
             );
     }
 }
@@ -20,7 +20,7 @@ pub struct LevelOverCleanupMarker;
 pub struct GameState {
     pub score: usize,
     pub shadows_on: bool,
-    pub graphics_high: bool, 
+    pub graphics_high: bool,
     pub maze_size: f32,
     pub is_latest: bool,
     pub touchdown_on_leftside: bool,
@@ -29,17 +29,17 @@ pub struct GameState {
     pub enemies_spawned: bool,
     pub corn_spawned: bool,
     pub death_count: usize,
-    pub current_round: usize
+    pub current_round: usize,
 }
 
 impl GameState {
     pub fn initialize(graphics: bool, shadows_on: bool, game_version: bool) -> Self {
         GameState {
             score: 0,
-            shadows_on: shadows_on, 
-            graphics_high: graphics, 
-            attached_enemies: 0, 
-            is_latest: game_version, 
+            shadows_on: shadows_on,
+            graphics_high: graphics,
+            attached_enemies: 0,
+            is_latest: game_version,
             maze_size: 80.0,
             touchdown_on_leftside: false,
             corn_spawned: false,
@@ -56,8 +56,8 @@ impl Default for GameState {
         GameState {
             score: 0,
             shadows_on: true,
-            graphics_high: true, 
-            attached_enemies: 0, 
+            graphics_high: true,
+            attached_enemies: 0,
             enemies_spawned: false,
             is_latest: true,
             maze_size: 80.0,

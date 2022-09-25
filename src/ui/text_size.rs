@@ -49,4 +49,3 @@ fn store_current_window_size(
         win_size.height = e.height;
     }
 }
-

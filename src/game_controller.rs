@@ -40,8 +40,14 @@ pub fn store_controller_inputs(
         let gamepad = *gamepad;
 
         // The joysticks are represented using a separate axis for X and Y
-        let axis_lx = GamepadAxis{ gamepad: gamepad, axis_type: GamepadAxisType::LeftStickX };
-        let axis_ly = GamepadAxis{ gamepad: gamepad, axis_type: GamepadAxisType::LeftStickY };
+        let axis_lx = GamepadAxis {
+            gamepad: gamepad,
+            axis_type: GamepadAxisType::LeftStickX,
+        };
+        let axis_ly = GamepadAxis {
+            gamepad: gamepad,
+            axis_type: GamepadAxisType::LeftStickY,
+        };
 
         if let (Some(x), Some(y)) = (axes.get(axis_lx), axes.get(axis_ly)) {
             // combine X and Y into one vector
@@ -92,35 +98,47 @@ pub fn store_controller_inputs(
         //      }
 
         // Dpad isn't an axis anymore in bevy 0.8
-//      let axis_dx = GamepadAxis(gamepad, GamepadAxisType::DPadX);
-//      let axis_dy = GamepadAxis(gamepad, GamepadAxisType::DPadY);
+        //      let axis_dx = GamepadAxis(gamepad, GamepadAxisType::DPadX);
+        //      let axis_dy = GamepadAxis(gamepad, GamepadAxisType::DPadY);
 
-//      if let (Some(x), Some(y)) = (axes.get(axis_dx), axes.get(axis_dy)) {
-//          // combine X and Y into one vector
-//          let left_stick_pos = Vec2::new(x, y);
+        //      if let (Some(x), Some(y)) = (axes.get(axis_dx), axes.get(axis_dy)) {
+        //          // combine X and Y into one vector
+        //          let left_stick_pos = Vec2::new(x, y);
 
-//          // implement a dead-zone to ignore small inputs
-//          if left_stick_pos.length() > 0.2 {
-//              // do something with the position of the left stick
-//              if x > 0.0 {
-//                  pressed_buttons.push(GameButton::Right);
-//              }
-//              if x < 0.0 {
-//                  pressed_buttons.push(GameButton::Left);
-//              }
-//              if y > 0.0 {
-//                  pressed_buttons.push(GameButton::Up);
-//              }
-//              if y < 0.0 {
-//                  pressed_buttons.push(GameButton::Down);
-//              }
-//          }
-//      }
+        //          // implement a dead-zone to ignore small inputs
+        //          if left_stick_pos.length() > 0.2 {
+        //              // do something with the position of the left stick
+        //              if x > 0.0 {
+        //                  pressed_buttons.push(GameButton::Right);
+        //              }
+        //              if x < 0.0 {
+        //                  pressed_buttons.push(GameButton::Left);
+        //              }
+        //              if y > 0.0 {
+        //                  pressed_buttons.push(GameButton::Up);
+        //              }
+        //              if y < 0.0 {
+        //                  pressed_buttons.push(GameButton::Down);
+        //              }
+        //          }
+        //      }
 
-        let dpad_up = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::DPadUp };
-        let dpad_down = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::DPadDown };
-        let dpad_left = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::DPadLeft };
-        let dpad_right = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::DPadRight };
+        let dpad_up = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::DPadUp,
+        };
+        let dpad_down = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::DPadDown,
+        };
+        let dpad_left = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::DPadLeft,
+        };
+        let dpad_right = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::DPadRight,
+        };
 
         if buttons.pressed(dpad_up) {
             pressed_buttons.push(GameButton::Up);
@@ -138,10 +156,22 @@ pub fn store_controller_inputs(
             pressed_buttons.push(GameButton::Right);
         }
 
-        let south = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::South };
-        let east = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::East };
-        let west = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::West };
-        let north = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::North };
+        let south = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::South,
+        };
+        let east = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::East,
+        };
+        let west = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::West,
+        };
+        let north = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::North,
+        };
 
         if buttons.pressed(south) {
             pressed_buttons.push(GameButton::ActionDown);
@@ -156,7 +186,10 @@ pub fn store_controller_inputs(
             pressed_buttons.push(GameButton::ActionRight);
         }
 
-        let start_button = GamepadButton { gamepad: gamepad, button_type: GamepadButtonType::Start };
+        let start_button = GamepadButton {
+            gamepad: gamepad,
+            button_type: GamepadButtonType::Start,
+        };
         if buttons.pressed(start_button) {
             pressed_buttons.push(GameButton::Start);
         }
@@ -180,7 +213,11 @@ pub fn gamepad_connections(
     mut gamepad_evr: EventReader<GamepadEvent>,
     mut controllers: ResMut<GameController>,
 ) {
-    for GamepadEvent { gamepad, event_type } in gamepad_evr.iter() {
+    for GamepadEvent {
+        gamepad,
+        event_type,
+    } in gamepad_evr.iter()
+    {
         if *event_type == GamepadEventType::Connected {
             println!("New gamepad connected with ID: {:?}", gamepad);
             controllers.players.push(*gamepad);

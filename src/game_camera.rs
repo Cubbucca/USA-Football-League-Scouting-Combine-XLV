@@ -1,18 +1,16 @@
-use crate::{player, LEFT_GOAL, assets::GameAssets};
+use crate::{assets::GameAssets, player, LEFT_GOAL};
+use bevy::core_pipeline::clear_color::ClearColorConfig;
 use bevy::input::mouse::{MouseMotion, MouseWheel};
 use bevy::prelude::*;
-use std::f32::consts::{TAU, PI};
-use bevy::core_pipeline::clear_color::ClearColorConfig;
-use bevy::render::camera::{PerspectiveProjection, ScalingMode, RenderTarget};
-use bevy::render::{
-    view::RenderLayers,
-};
+use bevy::render::camera::{PerspectiveProjection, RenderTarget, ScalingMode};
+use bevy::render::view::RenderLayers;
+use std::f32::consts::{PI, TAU};
 
 #[derive(Component)]
 pub struct HostCamera;
 
-pub const INGAME_CAMERA_X: f32 = -32.2; 
-pub const INGAME_CAMERA_Y: f32 = 14.0; 
+pub const INGAME_CAMERA_X: f32 = -32.2;
+pub const INGAME_CAMERA_Y: f32 = 14.0;
 pub const INGAME_CAMERA_ROTATION_AXIS: Vec3 = Vec3::new(-0.2211861, -0.9493068, -0.22336805);
 pub const INGAME_CAMERA_ROTATION_ANGLE: f32 = 1.6325973;
 
@@ -41,22 +39,18 @@ pub fn follow_player(
     let camera_speed = 1.2;
     for mut camera_transform in cameras.iter_mut() {
         for player_transform in players.iter() {
-            camera_transform.translation.z += 
-                (player_transform.translation.z - camera_transform.translation.z)
+            camera_transform.translation.z += (player_transform.translation.z
+                - camera_transform.translation.z)
                 * camera_speed
                 * time.delta_seconds();
-
         }
     }
 }
 
-pub fn handle_will_camera( 
-    mut will_camera: Query<(&mut Transform, &HostCamera)>,
-    time: Res<Time>,
-) {
-//  for (mut transform, _) in &mut will_camera {
-//      transform.rotate_y(time.delta_seconds());
-//  }
+pub fn handle_will_camera(mut will_camera: Query<(&mut Transform, &HostCamera)>, time: Res<Time>) {
+    //  for (mut transform, _) in &mut will_camera {
+    //      transform.rotate_y(time.delta_seconds());
+    //  }
 }
 
 pub fn pan_orbit_camera(
@@ -100,7 +94,7 @@ pub fn pan_orbit_camera(
     }
 
     for (mut pan_orbit, mut transform) in query.iter_mut() {
-//        println!("C: {:?}", transform.rotation.to_axis_angle());
+        //        println!("C: {:?}", transform.rotation.to_axis_angle());
         if orbit_button_changed {
             // only check for upside down when orbiting started or ended this frame
             // if the camera is "upside" down, panning horizontally would be inverted, so invert the input to make it correct
@@ -160,76 +154,78 @@ fn get_primary_window_size(windows: &Res<Windows>) -> Vec2 {
 }
 
 pub fn spawn_camera<T: Component + Clone>(
-    commands: &mut Commands, cleanup_marker: T,
+    commands: &mut Commands,
+    cleanup_marker: T,
     game_assets: &Res<GameAssets>,
     translation: Vec3,
     rotation: Quat,
 ) {
     let radius = translation.length();
 
-//  let first_pass_layer = RenderLayers::layer(1);
-//  // Will Camera
-//  commands.spawn_bundle(Camera3dBundle {
-//      transform: {
-//          let mut t = Transform::from_xyz(21.5, 2.0, 1.0);
-//          t.rotation = Quat::from_rotation_y(TAU * 0.75);
-//          t
-//      },
-//      camera: Camera {
-//          priority: -1,
-//          target: RenderTarget::Image(game_assets.will_camera.clone()),
-//          ..default()
-//      },
-//      camera_3d: Camera3d {
-//          clear_color: ClearColorConfig::Default,
-//          ..default()
-//      },
-//      ..default()
-//  })
-//  .insert(UiCameraConfig {
-//      show_ui: false,
-//  })
-//  .insert(HostCamera)
-//  .insert(cleanup_marker.clone());
+    //  let first_pass_layer = RenderLayers::layer(1);
+    //  // Will Camera
+    //  commands.spawn_bundle(Camera3dBundle {
+    //      transform: {
+    //          let mut t = Transform::from_xyz(21.5, 2.0, 1.0);
+    //          t.rotation = Quat::from_rotation_y(TAU * 0.75);
+    //          t
+    //      },
+    //      camera: Camera {
+    //          priority: -1,
+    //          target: RenderTarget::Image(game_assets.will_camera.clone()),
+    //          ..default()
+    //      },
+    //      camera_3d: Camera3d {
+    //          clear_color: ClearColorConfig::Default,
+    //          ..default()
+    //      },
+    //      ..default()
+    //  })
+    //  .insert(UiCameraConfig {
+    //      show_ui: false,
+    //  })
+    //  .insert(HostCamera)
+    //  .insert(cleanup_marker.clone());
 
     println!("Spawning camera");
-    commands.spawn_bundle(Camera3dBundle {
-        transform: {
-            let mut t = Transform::from_translation(translation);
-            t.rotation = rotation;
+    commands
+        .spawn_bundle(Camera3dBundle {
+            transform: {
+                let mut t = Transform::from_translation(translation);
+                t.rotation = rotation;
 
-            t
-        },
-        camera: Camera {
-            priority: 0,
+                t
+            },
+            camera: Camera {
+                priority: 0,
+                ..default()
+            },
+            //      projection: OrthographicProjection {
+            //          scale: 10.0,
+            //          scaling_mode: ScalingMode::FixedVertical(1.0),
+            //          near: -100.0,
+            //          ..default()
+            //      }.into(),
             ..default()
-        },
-//      projection: OrthographicProjection {
-//          scale: 10.0,
-//          scaling_mode: ScalingMode::FixedVertical(1.0),
-//          near: -100.0,
-//          ..default()
-//      }.into(),
-        ..default()
-    })
-    .insert(cleanup_marker.clone())
-    .insert(PanOrbitCamera {
-        radius,
-        ..Default::default()
-    });
+        })
+        .insert(cleanup_marker.clone())
+        .insert(PanOrbitCamera {
+            radius,
+            ..Default::default()
+        });
 
-    commands.spawn_bundle(Camera2dBundle {
-        camera_2d: Camera2d {
-            clear_color: ClearColorConfig::None,
+    commands
+        .spawn_bundle(Camera2dBundle {
+            camera_2d: Camera2d {
+                clear_color: ClearColorConfig::None,
+                ..default()
+            },
+            camera: Camera {
+                priority: 1,
+                ..default()
+            },
             ..default()
-        },
-        camera: Camera {
-            priority: 1,
-            ..default()
-        },
-        ..default()
-    })
-    .insert(cleanup_marker.clone());
-//    .insert(first_pass_layer);
+        })
+        .insert(cleanup_marker.clone());
+    //    .insert(first_pass_layer);
 }
-

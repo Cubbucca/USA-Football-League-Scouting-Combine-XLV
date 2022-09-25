@@ -1,4 +1,8 @@
-use crate::{AppState, game_controller, direction, game_state, collision, assets::GameAssets, component_adder::AnimationLink, ZeroSignum, LEFT_GOAL, RIGHT_GOAL, football, ingame, billboard::Billboard, cutscene, audio::GameAudio};
+use crate::{
+    assets::GameAssets, audio::GameAudio, billboard::Billboard, collision,
+    component_adder::AnimationLink, cutscene, direction, football, game_controller, game_state,
+    ingame, AppState, ZeroSignum, LEFT_GOAL, RIGHT_GOAL,
+};
 use bevy::prelude::*;
 use leafwing_input_manager::prelude::*;
 use rand::Rng;
@@ -44,19 +48,19 @@ pub fn handle_player_blade_event(
             player.is_dead = true;
             player.dead_cooldown = 1.2;
 
-//          println!("creating billboard");
-//          commands.spawn_bundle(PbrBundle {
-//                  mesh: game_assets.blood_mesh.clone(),
-//                  material: game_assets.blood.material.clone(),
-//                  transform: {
-//                      let mut t = transform.clone();
-//                      t.rotation = Quat::from_axis_angle(Vec3::X, (3.0 * std::f32::consts::PI) / 2.0);
-//                      t
-//                  },
-//                  ..Default::default()
-//              })
-//              .insert(Billboard)
-//              .insert(ingame::CleanupMarker);
+            //          println!("creating billboard");
+            //          commands.spawn_bundle(PbrBundle {
+            //                  mesh: game_assets.blood_mesh.clone(),
+            //                  material: game_assets.blood.material.clone(),
+            //                  transform: {
+            //                      let mut t = transform.clone();
+            //                      t.rotation = Quat::from_axis_angle(Vec3::X, (3.0 * std::f32::consts::PI) / 2.0);
+            //                      t
+            //                  },
+            //                  ..Default::default()
+            //              })
+            //              .insert(Billboard)
+            //              .insert(ingame::CleanupMarker);
         }
     }
 }
@@ -70,9 +74,11 @@ pub fn check_for_touchdown(
     mut audio: GameAudio,
 ) {
     for (player_entity, player_transform, mut player) in &mut players {
-        if player.has_football 
-        && ((game_state.touchdown_on_leftside && player_transform.translation.z <= LEFT_GOAL) 
-         || (!game_state.touchdown_on_leftside && player_transform.translation.z >= RIGHT_GOAL)) {
+        if player.has_football
+            && ((game_state.touchdown_on_leftside && player_transform.translation.z <= LEFT_GOAL)
+                || (!game_state.touchdown_on_leftside
+                    && player_transform.translation.z >= RIGHT_GOAL))
+        {
             player.has_football = false;
             touchdown_event_writer.send(game_state::TouchdownEvent);
             audio.play_sfx(&game_assets.touch_down);
@@ -114,11 +120,11 @@ pub fn move_player(
             audio.play_sfx(&game_assets.tackle_sound);
             player.dead_cooldown = 1.2;
         }
-        if player.is_dead || player.is_tackled { 
-            player.dead_cooldown -= time.delta_seconds();     
+        if player.is_dead || player.is_tackled {
+            player.dead_cooldown -= time.delta_seconds();
             player.dead_cooldown = player.dead_cooldown.clamp(-3.0, 30.0);
 
-            if player.dead_cooldown <= 0.0 { 
+            if player.dead_cooldown <= 0.0 {
                 if player.is_dead {
                     game_state.death_count += 1;
                     player.is_dead = false;
@@ -126,9 +132,9 @@ pub fn move_player(
                 } else if player.is_tackled {
                     cutscene_state.init(cutscene::Cutscene::Tackle);
                 }
-                return; 
+                return;
             }
-            continue; 
+            continue;
         }
 
         let speed: f32 = player.speed;
@@ -154,7 +160,7 @@ pub fn move_player(
             &transform.translation,
             &mut new_translation,
             &mut player.velocity,
-            &time
+            &time,
         );
 
         let angle = (-(new_translation.z - transform.translation.z))
@@ -176,11 +182,13 @@ pub fn move_player(
             if let Some(animation_entity) = animation_link.entity {
                 let mut animation = animations.get_mut(animation_entity).unwrap();
                 if player.current_animation != game_assets.person_idle {
-                    animation.play(game_assets.person_idle.clone_weak()).repeat();
+                    animation
+                        .play(game_assets.person_idle.clone_weak())
+                        .repeat();
                     animation.resume();
                     player.current_animation = game_assets.person_idle.clone_weak();
                     animation.set_speed(4.0);
-                } 
+                }
             }
         }
 
@@ -194,7 +202,6 @@ pub fn move_player(
         }
     }
 }
-
 
 #[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum PlayerAction {
@@ -327,7 +334,6 @@ impl PlayerBundle {
     }
 }
 
-
 fn handle_controllers(
     controllers: Res<game_controller::GameController>,
     game_state: Res<game_state::GameState>,
@@ -425,28 +431,19 @@ fn handle_input(
             });
         }
 
-        if action_state.just_pressed(PlayerAction::ActionUp) {
-        }
-        if action_state.pressed(PlayerAction::ActionUp) {
-        }
+        if action_state.just_pressed(PlayerAction::ActionUp) {}
+        if action_state.pressed(PlayerAction::ActionUp) {}
 
-        if action_state.just_pressed(PlayerAction::ActionDown) {
-        }
+        if action_state.just_pressed(PlayerAction::ActionDown) {}
 
-        if action_state.pressed(PlayerAction::ActionDown) {
-        }
+        if action_state.pressed(PlayerAction::ActionDown) {}
 
-        if action_state.just_pressed(PlayerAction::ActionLeft) {
-        }
+        if action_state.just_pressed(PlayerAction::ActionLeft) {}
 
-        if action_state.pressed(PlayerAction::ActionLeft) {
-        }
+        if action_state.pressed(PlayerAction::ActionLeft) {}
 
-        if action_state.just_pressed(PlayerAction::ActionRight) {
-        }
+        if action_state.just_pressed(PlayerAction::ActionRight) {}
 
-        if action_state.pressed(PlayerAction::ActionRight) {
-        }
+        if action_state.pressed(PlayerAction::ActionRight) {}
     }
 }
-

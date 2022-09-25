@@ -1,6 +1,6 @@
 use crate::{
-    asset_loading, assets::GameAssets, audio::GameAudio, cleanup, 
-    game_controller, game_state, menus, title_screen::MenuAction, ui::text_size, AppState,
+    asset_loading, assets::GameAssets, audio::GameAudio, cleanup, game_controller, game_state,
+    menus, title_screen::MenuAction, ui::text_size, AppState,
 };
 use bevy::prelude::*;
 use leafwing_input_manager::prelude::*;
@@ -363,7 +363,8 @@ fn add_label(
                 font_size,
                 color: Color::WHITE,
             },
-        ).with_alignment(TextAlignment::default()),
+        )
+        .with_alignment(TextAlignment::default()),
         ..Default::default()
     });
     components.drain(..).for_each(|c| {
@@ -396,8 +397,8 @@ fn add_option(
                 font_size,
                 color: Color::WHITE,
             },
-            
-        ).with_alignment(TextAlignment::default()),
+        )
+        .with_alignment(TextAlignment::default()),
         ..Default::default()
     });
 
@@ -424,9 +425,8 @@ fn add_option(
                 font_size,
                 color: Color::WHITE,
             },
-        ).with_alignment(
-            TextAlignment::default(),
-        ),
+        )
+        .with_alignment(TextAlignment::default()),
         ..Default::default()
     });
 
@@ -454,7 +454,8 @@ fn add_option(
                 font_size,
                 color: Color::WHITE,
             },
-        ).with_alignment(TextAlignment::default()),
+        )
+        .with_alignment(TextAlignment::default()),
         ..Default::default()
     });
 
@@ -485,12 +486,11 @@ fn add_button(
                 font_size,
                 color: Color::WHITE,
             },
-        ).with_alignment(
-            TextAlignment {
-                horizontal: HorizontalAlign::Center,
-                ..Default::default()
-            },
-        ),
+        )
+        .with_alignment(TextAlignment {
+            horizontal: HorizontalAlign::Center,
+            ..Default::default()
+        }),
         ..Default::default()
     });
 
@@ -525,12 +525,11 @@ pub fn add_title(
                 font_size,
                 color: Color::WHITE,
             },
-        ).with_alignment(
-            TextAlignment {
-                horizontal: HorizontalAlign::Center,
-                ..Default::default()
-            },
-        ),
+        )
+        .with_alignment(TextAlignment {
+            horizontal: HorizontalAlign::Center,
+            ..Default::default()
+        }),
         ..Default::default()
     });
 
@@ -655,55 +654,69 @@ fn handle_option_changes(
                 let max = 2;
                 match option_change.action {
                     OptionChange::Increase => {
-                        options.graphics = if options.graphics == max { min } 
-                                                   else { options.graphics + 1 };
+                        options.graphics = if options.graphics == max {
+                            min
+                        } else {
+                            options.graphics + 1
+                        };
                         audio.play_sfx(&game_assets.blip);
                     }
                     OptionChange::Decrease => {
-                        options.graphics = if options.graphics == min { max } 
-                                                   else { options.graphics - 1 };
+                        options.graphics = if options.graphics == min {
+                            max
+                        } else {
+                            options.graphics - 1
+                        };
                         audio.play_sfx(&game_assets.blip);
                     }
                     _ => (),
                 };
-            },
+            }
             1 => {
                 let min = 0;
                 let max = 1;
                 match option_change.action {
                     OptionChange::Increase => {
-                        options.shadows_on = if options.shadows_on == max { min } 
-                                           else { max };
+                        options.shadows_on = if options.shadows_on == max { min } else { max };
                         audio.play_sfx(&game_assets.blip);
                     }
                     OptionChange::Decrease => {
-                        options.shadows_on = if options.shadows_on == max { min } 
-                                           else { max };
+                        options.shadows_on = if options.shadows_on == max { min } else { max };
                         audio.play_sfx(&game_assets.blip);
                     }
                     _ => (),
                 };
-            },
+            }
             2 => {
                 let min = 0;
                 let max = 1;
                 match option_change.action {
                     OptionChange::Increase => {
-                        options.game_version = if options.game_version == max { min } 
-                                           else { max };
+                        options.game_version = if options.game_version == max {
+                            min
+                        } else {
+                            max
+                        };
                         audio.play_sfx(&game_assets.blip);
                     }
                     OptionChange::Decrease => {
-                        options.game_version = if options.game_version == max { min } 
-                                           else { max };
+                        options.game_version = if options.game_version == max {
+                            min
+                        } else {
+                            max
+                        };
                         audio.play_sfx(&game_assets.blip);
                     }
                     _ => (),
                 };
-            },
+            }
             3 => {
                 if let OptionChange::Select = option_change.action {
-                    *game_state = game_state::GameState::initialize(options.graphics == 0, options.shadows_on == 0, options.game_version == 0);
+                    *game_state = game_state::GameState::initialize(
+                        options.graphics == 0,
+                        options.shadows_on == 0,
+                        options.game_version == 0,
+                    );
 
                     audio.play_sfx(&game_assets.blip);
                     assets_handler.load(AppState::InGame, &mut game_assets, &mut game_state);

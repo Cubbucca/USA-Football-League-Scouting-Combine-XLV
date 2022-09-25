@@ -23,4 +23,3 @@ fn fullscreen(mut windows: ResMut<Windows>) {
         }
     }
 }
-

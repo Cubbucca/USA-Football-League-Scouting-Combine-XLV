@@ -1,10 +1,14 @@
-use crate::{AppState, game_controller, direction, game_state, collision, assets::GameAssets, component_adder::AnimationLink, ZeroSignum, maze, player, LEFT_GOAL, RIGHT_GOAL, TOP_END, BOTTOM_END, ingame, audio::GameAudio};
+use crate::{
+    assets::GameAssets, audio::GameAudio, collision, component_adder::AnimationLink, direction,
+    game_controller, game_state, ingame, maze, player, AppState, ZeroSignum, BOTTOM_END, LEFT_GOAL,
+    RIGHT_GOAL, TOP_END,
+};
+use bevy::gltf::Gltf;
 use bevy::prelude::*;
+use bevy::render::primitives::Aabb;
 use rand::Rng;
 use std::collections::HashMap;
-use bevy::render::primitives::Aabb;
 use std::f32::consts::{FRAC_PI_2, TAU};
-use bevy::gltf::Gltf;
 
 pub struct EnemyPlugin;
 impl Plugin for EnemyPlugin {
@@ -37,7 +41,7 @@ pub struct Enemy {
     pub is_launched: bool,
     pub friction: f32,
     pub random: f32,
-    pub current_animation: Handle::<AnimationClip>,
+    pub current_animation: Handle<AnimationClip>,
     pub landing_target: Vec3,
     pub launch_starting_position: Vec3,
     pub current_flying_time: f32,
@@ -71,10 +75,10 @@ impl Enemy {
 pub struct EnemyLineOfSight;
 
 pub struct EnemyBladeEvent {
-    pub entity: Entity
+    pub entity: Entity,
 }
 
-fn handle_spawn_enemies_event( 
+fn handle_spawn_enemies_event(
     mut commands: Commands,
     mut spawn_enemies_event_reader: EventReader<SpawnEnemiesEvent>,
     game_assets: Res<GameAssets>,
@@ -88,7 +92,7 @@ fn handle_spawn_enemies_event(
         let enemy_count = match game_state.current_round {
             1 => 5,
             2 => 6,
-            _ => 3
+            _ => 3,
         };
 
         if let Some(gltf) = assets_gltf.get(&game_assets.enemy.clone()) {
@@ -102,9 +106,11 @@ fn handle_spawn_enemies_event(
                 let min_x = BOTTOM_END + x_buffer;
                 let max_x = TOP_END - x_buffer;
                 while target.is_none() {
-                    let potential_position = Vec3::new(rng.gen_range(min_x..max_x), 
-                                                       0.0, 
-                                                       rng.gen_range(min_z..max_z));
+                    let potential_position = Vec3::new(
+                        rng.gen_range(min_x..max_x),
+                        0.0,
+                        rng.gen_range(min_z..max_z),
+                    );
                     if !collidables.is_in_collidable(&potential_position) {
                         target = Some(potential_position);
                     }
@@ -121,48 +127,54 @@ fn handle_spawn_enemies_event(
                             alpha_mode: AlphaMode::Blend,
                             ..Default::default()
                         }),
-                        visibility: Visibility {
-                            is_visible: false
-                        },
+                        visibility: Visibility { is_visible: false },
                         transform: Transform::from_scale(Vec3::ZERO),
                         ..Default::default()
                     })
-                    .insert(EnemyLineOfSight { })
+                    .insert(EnemyLineOfSight {})
                     .insert(ingame::CleanupMarker)
                     .id();
-                commands.spawn_bundle(SceneBundle {
-                            scene: gltf.scenes[0].clone(),
-                            transform: Transform::from_xyz(target.x, 0.0, target.z),
-                            ..default()
-                        })
-                        .insert(Enemy::new(line_of_sight_id))
-                        .insert(AnimationLink {
-                            entity: None
-                        })
-                        .insert(ingame::CleanupMarker);
+                commands
+                    .spawn_bundle(SceneBundle {
+                        scene: gltf.scenes[0].clone(),
+                        transform: Transform::from_xyz(target.x, 0.0, target.z),
+                        ..default()
+                    })
+                    .insert(Enemy::new(line_of_sight_id))
+                    .insert(AnimationLink { entity: None })
+                    .insert(ingame::CleanupMarker);
             }
         }
     }
 }
 
-pub fn handle_flying_enemies(
-    mut enemies: Query<(&mut Enemy, &mut Transform)>,
-    time: Res<Time>,
-) {
+pub fn handle_flying_enemies(mut enemies: Query<(&mut Enemy, &mut Transform)>, time: Res<Time>) {
     let flight_time = 2.0;
     let flight_height = 20.0;
 
     for (mut enemy, mut transform) in &mut enemies {
         if enemy.is_launched {
-            let (target_with_height, start_with_height) 
-                = if enemy.current_flying_time / flight_time <= 0.5 {
-                     (Vec3::new(enemy.landing_target.x, flight_height, enemy.landing_target.z),
-                     enemy.launch_starting_position)
-                  } else {
-                     (enemy.landing_target,
-                     (Vec3::new(enemy.launch_starting_position.x, flight_height, enemy.launch_starting_position.z)))
-                  };
-            transform.translation = 
+            let (target_with_height, start_with_height) =
+                if enemy.current_flying_time / flight_time <= 0.5 {
+                    (
+                        Vec3::new(
+                            enemy.landing_target.x,
+                            flight_height,
+                            enemy.landing_target.z,
+                        ),
+                        enemy.launch_starting_position,
+                    )
+                } else {
+                    (
+                        enemy.landing_target,
+                        (Vec3::new(
+                            enemy.launch_starting_position.x,
+                            flight_height,
+                            enemy.launch_starting_position.z,
+                        )),
+                    )
+                };
+            transform.translation =
                 start_with_height.lerp(target_with_height, enemy.current_flying_time / flight_time);
             transform.rotate_x(time.delta_seconds());
             transform.rotate_y(time.delta_seconds() / 2.0);
@@ -204,9 +216,11 @@ pub fn handle_enemy_blade_event(
             let min_x = BOTTOM_END + x_buffer;
             let max_x = TOP_END - x_buffer;
             while target.is_none() {
-                let potential_position = Vec3::new(rng.gen_range(min_x..max_x), 
-                                                   0.0, 
-                                                   rng.gen_range(min_z..max_z));
+                let potential_position = Vec3::new(
+                    rng.gen_range(min_x..max_x),
+                    0.0,
+                    rng.gen_range(min_z..max_z),
+                );
                 if !collidables.is_in_collidable(&potential_position) {
                     target = Some(potential_position);
                 }
@@ -226,12 +240,15 @@ fn scale_lines_of_sight(
     corns: Query<(&maze::CornStalk, &Transform), Without<EnemyLineOfSight>>,
     player: Query<&Transform, (Without<EnemyLineOfSight>, With<player::Player>)>,
 ) {
-    let unharvested_corn = corns.iter()
-                                .filter(|(c, _)| !c.is_harvested)
-                                .collect::<Vec::<_>>();
+    let unharvested_corn = corns
+        .iter()
+        .filter(|(c, _)| !c.is_harvested)
+        .collect::<Vec<_>>();
     let LOS_LENGTH = 15.0;
     for (mut enemy, enemy_transform) in &mut enemies {
-        if let Ok((mut line_of_sight, los_aabb, los_global_transform)) = lines_of_sight.get_mut(enemy.line_of_sight) {
+        if let Ok((mut line_of_sight, los_aabb, los_global_transform)) =
+            lines_of_sight.get_mut(enemy.line_of_sight)
+        {
             let los_global_matrix = los_global_transform.compute_matrix();
             let los_inverse_transform_matrix = los_global_matrix.inverse();
             let los_min: Vec3 = los_aabb.min().into();
@@ -244,11 +261,12 @@ fn scale_lines_of_sight(
             let distance_to_player = {
                 let player = player.single();
                 let player_translation = player.translation;
-                let player_inverse = los_inverse_transform_matrix.transform_point3(player_translation);
+                let player_inverse =
+                    los_inverse_transform_matrix.transform_point3(player_translation);
                 let player_in_hitbox = player_inverse.x > los_min.x
-                                    && player_inverse.x < los_max.x
-                                    && player_inverse.z > los_min.z
-                                    && player_inverse.z < los_max.z;
+                    && player_inverse.x < los_max.x
+                    && player_inverse.z > los_min.z
+                    && player_inverse.z < los_max.z;
                 if player_in_hitbox {
                     Some(player.translation.distance(enemy_transform.translation))
                 } else {
@@ -256,30 +274,31 @@ fn scale_lines_of_sight(
                 }
             };
 
-            let mut corn_in_front_of_enemy = 
-                unharvested_corn.iter()
-                         .filter_map(|(c, t)| {
-                             let corn_translation = t.translation;
-                             let corn_inverse = los_inverse_transform_matrix.transform_point3(corn_translation);
-                             let corn_in_hitbox = corn_inverse.x > los_min.x
-                                               && corn_inverse.x < los_max.x
-                                               && corn_inverse.z > los_min.z
-                                               && corn_inverse.z < los_max.z;
-                             if corn_in_hitbox {
-                                 let distance = t.translation.distance(enemy_transform.translation);
-                                 Some((c, t, distance))
-                             } else {
-                                 None
-                             }
-                         })
-                         .collect::<Vec::<_>>();
+            let mut corn_in_front_of_enemy = unharvested_corn
+                .iter()
+                .filter_map(|(c, t)| {
+                    let corn_translation = t.translation;
+                    let corn_inverse =
+                        los_inverse_transform_matrix.transform_point3(corn_translation);
+                    let corn_in_hitbox = corn_inverse.x > los_min.x
+                        && corn_inverse.x < los_max.x
+                        && corn_inverse.z > los_min.z
+                        && corn_inverse.z < los_max.z;
+                    if corn_in_hitbox {
+                        let distance = t.translation.distance(enemy_transform.translation);
+                        Some((c, t, distance))
+                    } else {
+                        None
+                    }
+                })
+                .collect::<Vec<_>>();
 
             corn_in_front_of_enemy.sort_by(|a, b| a.2.partial_cmp(&b.2).unwrap());
 
             let end_of_sight = corn_in_front_of_enemy
-                                .first()
-                                .map(|(_, t, _)| t.translation)
-                                .unwrap_or(end_of_sight);
+                .first()
+                .map(|(_, t, _)| t.translation)
+                .unwrap_or(end_of_sight);
             let middle = enemy_transform.translation.lerp(end_of_sight, 0.5);
             let line_of_sight_length = enemy_transform.translation.distance(end_of_sight);
 
@@ -288,18 +307,16 @@ fn scale_lines_of_sight(
                 if line_of_sight_length > distance_to_player {
                     enemy.can_see_player = true;
                 }
-            } 
+            }
 
             line_of_sight.scale = Vec3::new(line_of_sight_length / 2.0, 1.00, 1.00);
             line_of_sight.translation = Vec3::new(middle.x, 1.0, middle.z);
 
             // Rotate the direction indicator
             if Vec3::Z.angle_between(direction) > FRAC_PI_2 {
-                line_of_sight.rotation =
-                    Quat::from_rotation_y(Vec3::X.angle_between(direction));
+                line_of_sight.rotation = Quat::from_rotation_y(Vec3::X.angle_between(direction));
             } else {
-                line_of_sight.rotation =
-                    Quat::from_rotation_y(-Vec3::X.angle_between(direction));
+                line_of_sight.rotation = Quat::from_rotation_y(-Vec3::X.angle_between(direction));
             }
         }
     }
@@ -310,13 +327,15 @@ fn move_enemy(
     mut animations: Query<&mut AnimationPlayer>,
     player: Query<&Transform, (With<player::Player>, Without<Enemy>)>,
     collidables: collision::Collidables,
-    mut game_state: ResMut<game_state::GameState>, 
+    mut game_state: ResMut<game_state::GameState>,
     time: Res<Time>,
     game_assets: ResMut<GameAssets>,
     mut audio: GameAudio,
 ) {
     for (mut enemy, mut enemy_transform, animation_link) in &mut enemies {
-        if enemy.is_launched { continue; }
+        if enemy.is_launched {
+            continue;
+        }
 
         let speed: f32 = enemy.speed;
         let rotation_speed: f32 = enemy.rotation_speed;
@@ -334,7 +353,9 @@ fn move_enemy(
 
         if enemy.is_attached {
             enemy_transform.translation = player.translation;
-            enemy_transform.rotation = enemy_transform.rotation.lerp(player.rotation, 1.25 * enemy.random);
+            enemy_transform.rotation = enemy_transform
+                .rotation
+                .lerp(player.rotation, 1.25 * enemy.random);
             continue;
         }
 
@@ -348,7 +369,8 @@ fn move_enemy(
             if player.translation.distance(enemy_transform.translation) < 3.0 {
                 enemy.has_dived = true;
                 audio.play_sfx(&game_assets.dive);
-                enemy.velocity = (player.translation - enemy_transform.translation).normalize() * 0.5 * speed;
+                enemy.velocity =
+                    (player.translation - enemy_transform.translation).normalize() * 0.5 * speed;
                 if let Some(animation_entity) = animation_link.entity {
                     let mut animation = animations.get_mut(animation_entity).unwrap();
                     animation.play(game_assets.person_dive.clone_weak());
@@ -358,12 +380,13 @@ fn move_enemy(
             }
         }
 
-        let mut new_translation = enemy_transform.translation + (enemy.velocity * time.delta_seconds());
+        let mut new_translation =
+            enemy_transform.translation + (enemy.velocity * time.delta_seconds());
         collidables.fit_in(
             &enemy_transform.translation,
             &mut new_translation,
             &mut enemy.velocity,
-            &time
+            &time,
         );
 
         enemy_transform.translation = new_translation;
@@ -383,30 +406,32 @@ fn move_enemy(
                 enemy_transform.rotation = rotation;
             }
         } else {
-//          enemy.patrol_time -= time.delta_seconds();
+            //          enemy.patrol_time -= time.delta_seconds();
 
-//          if enemy.patrol_time <= 0.0 {
-//              if enemy_transform.rotation == Quat::from_axis_angle(Vec3::Y, TAU * 0.0) {
-//                  enemy_transform.rotation = Quat::from_axis_angle(Vec3::Y, TAU * 0.25);
-//                  enemy_transform.translation.y += 0.01;
-//              } else if enemy_transform.rotation == Quat::from_axis_angle(Vec3::Y, TAU * 0.25) {
-//                  enemy_transform.rotation = Quat::from_axis_angle(Vec3::Y, TAU * 0.50);
-//                  enemy_transform.translation.x += 0.01;
-//              } else if enemy_transform.rotation == Quat::from_axis_angle(Vec3::Y, TAU * 0.50){
-//                  enemy_transform.rotation = Quat::from_axis_angle(Vec3::Y, TAU * 0.75);
-//                  enemy_transform.translation.y -= 0.01;
-//              } else {
-//                  enemy_transform.rotation = Quat::from_axis_angle(Vec3::Y, TAU * 0.0);
-//                  enemy_transform.translation.x -= 0.01;
-//              }
+            //          if enemy.patrol_time <= 0.0 {
+            //              if enemy_transform.rotation == Quat::from_axis_angle(Vec3::Y, TAU * 0.0) {
+            //                  enemy_transform.rotation = Quat::from_axis_angle(Vec3::Y, TAU * 0.25);
+            //                  enemy_transform.translation.y += 0.01;
+            //              } else if enemy_transform.rotation == Quat::from_axis_angle(Vec3::Y, TAU * 0.25) {
+            //                  enemy_transform.rotation = Quat::from_axis_angle(Vec3::Y, TAU * 0.50);
+            //                  enemy_transform.translation.x += 0.01;
+            //              } else if enemy_transform.rotation == Quat::from_axis_angle(Vec3::Y, TAU * 0.50){
+            //                  enemy_transform.rotation = Quat::from_axis_angle(Vec3::Y, TAU * 0.75);
+            //                  enemy_transform.translation.y -= 0.01;
+            //              } else {
+            //                  enemy_transform.rotation = Quat::from_axis_angle(Vec3::Y, TAU * 0.0);
+            //                  enemy_transform.translation.x -= 0.01;
+            //              }
 
-//              enemy.patrol_time = 3.0 + enemy.random;
-//          }
-//          enemy.patrol_time = enemy.patrol_time.clamp(0.0, 10.0);
+            //              enemy.patrol_time = 3.0 + enemy.random;
+            //          }
+            //          enemy.patrol_time = enemy.patrol_time.clamp(0.0, 10.0);
             enemy_transform.rotate_y(time.delta_seconds() * (1.0 + enemy.random));
         }
 
-        if enemy.has_dived { continue; };
+        if enemy.has_dived {
+            continue;
+        };
 
         if enemy.velocity.length() > 1.0 {
             if let Some(animation_entity) = animation_link.entity {
@@ -415,18 +440,20 @@ fn move_enemy(
                     animation.play(game_assets.person_run.clone_weak()).repeat();
                     animation.resume();
                     enemy.current_animation = game_assets.person_run.clone_weak();
-                } 
+                }
                 animation.set_speed(enemy.velocity.length() / 2.0);
             }
         } else {
             if let Some(animation_entity) = animation_link.entity {
                 let mut animation = animations.get_mut(animation_entity).unwrap();
                 if enemy.current_animation != game_assets.person_idle {
-                    animation.play(game_assets.person_idle.clone_weak()).repeat();
+                    animation
+                        .play(game_assets.person_idle.clone_weak())
+                        .repeat();
                     animation.resume();
                     enemy.current_animation = game_assets.person_idle.clone_weak();
                     animation.set_speed(4.0);
-                } 
+                }
             }
         }
     }

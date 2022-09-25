@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+        {
+            "label": "cargo fmt && build",
+            "type": "shell",
+            // note: full path to cargo
+            "command": "cargo fmt; cargo build", 
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

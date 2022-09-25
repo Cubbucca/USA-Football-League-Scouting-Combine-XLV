@@ -1,15 +1,16 @@
-use crate::{AppState, game_state, collision, assets::GameAssets, player::Player, ingame,
-LEFT_END, RIGHT_END, LEFT_GOAL, RIGHT_GOAL, BOTTOM_END, TOP_END, enemy, audio::GameAudio};
+use crate::{
+    assets::GameAssets, audio::GameAudio, collision, enemy, game_state, ingame, player::Player,
+    AppState, BOTTOM_END, LEFT_END, LEFT_GOAL, RIGHT_END, RIGHT_GOAL, TOP_END,
+};
+use bevy::gltf::Gltf;
 use bevy::prelude::*;
 use rand::Rng;
-use bevy::gltf::Gltf;
-use std::f32::consts::{FRAC_PI_2};
+use std::f32::consts::FRAC_PI_2;
 
 pub struct FootballPlugin;
 impl Plugin for FootballPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<LaunchFootballEvent>()
-        .add_system_set(
+        app.add_event::<LaunchFootballEvent>().add_system_set(
             SystemSet::on_update(AppState::InGame)
                 .with_system(check_for_football_pickup)
                 .with_system(handle_launch_football_event)
@@ -44,7 +45,11 @@ fn handle_launch_football_event(
             let left_side = Vec3::new(6.976, 0.0, -48.0);
             let right_side = Vec3::new(6.976, 0.0, 48.0);
 
-            let position = if game_state.touchdown_on_leftside { right_side } else { left_side };
+            let position = if game_state.touchdown_on_leftside {
+                right_side
+            } else {
+                left_side
+            };
 
             let mut target = None;
             let mut rng = rand::thread_rng();
@@ -55,31 +60,34 @@ fn handle_launch_football_event(
             let min_x = BOTTOM_END + x_buffer;
             let max_x = TOP_END - x_buffer;
             while target.is_none() {
-                let potential_position = Vec3::new(rng.gen_range(min_x..max_x), 
-                                                   0.0, 
-                                                   rng.gen_range(min_z..max_z));
+                let potential_position = Vec3::new(
+                    rng.gen_range(min_x..max_x),
+                    0.0,
+                    rng.gen_range(min_z..max_z),
+                );
                 if !collidables.is_in_collidable(&potential_position) {
                     target = Some(potential_position);
                 }
             }
 
             audio.play_sfx(&game_assets.football_launch);
-            commands.spawn_bundle(SceneBundle {
-                        scene: gltf.scenes[0].clone(),
-                        transform: {
-                            let mut t = Transform::from_scale(Vec3::splat(3.0));
-                            t.translation = position;
-                            t
-                        },
-                        ..default()
-                    })
-                    .insert(Football {
-                        has_landed: false,
-                        target: target.unwrap(),
-                        starting_position: position,
-                        current_movement_time: 0.0,
-                    })
-                    .insert(ingame::CleanupMarker);
+            commands
+                .spawn_bundle(SceneBundle {
+                    scene: gltf.scenes[0].clone(),
+                    transform: {
+                        let mut t = Transform::from_scale(Vec3::splat(3.0));
+                        t.translation = position;
+                        t
+                    },
+                    ..default()
+                })
+                .insert(Football {
+                    has_landed: false,
+                    target: target.unwrap(),
+                    starting_position: position,
+                    current_movement_time: 0.0,
+                })
+                .insert(ingame::CleanupMarker);
         }
         if !game_state.enemies_spawned {
             spawn_enemies_event_writer.send(enemy::SpawnEnemiesEvent);
@@ -98,7 +106,11 @@ fn check_for_football_pickup(
     for (football_entity, football, football_transform) in &footballs {
         let (player_entity, mut player, player_transform) = player.single_mut();
 
-        if football_transform.translation.distance(player_transform.translation) < FOOTBALL_PICKUP_DISTANCE {
+        if football_transform
+            .translation
+            .distance(player_transform.translation)
+            < FOOTBALL_PICKUP_DISTANCE
+        {
             player.has_football = true;
 
             for (_, mut visibility, parent) in &mut carried_footballs {
@@ -112,25 +124,32 @@ fn check_for_football_pickup(
     }
 }
 
-fn move_football(
-    mut footballs: Query<(&mut Football, &mut Transform)>,
-    time: Res<Time>,
-) {
+fn move_football(mut footballs: Query<(&mut Football, &mut Transform)>, time: Res<Time>) {
     let flight_time = 2.0;
     let flight_height = 20.0;
 
     for (mut football, mut transform) in &mut footballs {
         if !football.has_landed {
-            let (target_with_height, start_with_height) 
-                = if football.current_movement_time / flight_time <= 0.5 {
-                     (Vec3::new(football.target.x, flight_height, football.target.z),
-                     football.starting_position)
-                  } else {
-                     (football.target,
-                     (Vec3::new(football.starting_position.x, flight_height, football.starting_position.z)))
-                  };
-            transform.translation = 
-                start_with_height.lerp(target_with_height, football.current_movement_time / flight_time);
+            let (target_with_height, start_with_height) =
+                if football.current_movement_time / flight_time <= 0.5 {
+                    (
+                        Vec3::new(football.target.x, flight_height, football.target.z),
+                        football.starting_position,
+                    )
+                } else {
+                    (
+                        football.target,
+                        (Vec3::new(
+                            football.starting_position.x,
+                            flight_height,
+                            football.starting_position.z,
+                        )),
+                    )
+                };
+            transform.translation = start_with_height.lerp(
+                target_with_height,
+                football.current_movement_time / flight_time,
+            );
             transform.rotate_x(time.delta_seconds());
             transform.rotate_y(time.delta_seconds() / 2.0);
             transform.rotate_z(time.delta_seconds() / 3.0);

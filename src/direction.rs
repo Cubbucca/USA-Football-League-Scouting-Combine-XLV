@@ -97,4 +97,3 @@ impl Neg for Direction {
         }
     }
 }
-

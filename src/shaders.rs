@@ -82,7 +82,7 @@ impl Material2d for PostProcessingMaterial {
 
 fn pass_time_to_shader(
     time: Res<Time>,
-    fresnels : Query<&Handle<FresnelMaterial>>,
+    fresnels: Query<&Handle<FresnelMaterial>>,
     mut fresnel_materials: ResMut<Assets<FresnelMaterial>>,
     textures: Query<&Handle<TextureMaterial>>,
     mut texture_materials: ResMut<Assets<TextureMaterial>>,

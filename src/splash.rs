@@ -1,17 +1,16 @@
+use crate::{
+    asset_loading, assets::GameAssets, cleanup, game_state, menus, ui::text_size, AppState,
+};
 use bevy::prelude::*;
-use crate::{AppState, ui::text_size, assets::GameAssets, menus, cleanup, asset_loading, game_state};
 
 pub struct SplashPlugin;
 impl Plugin for SplashPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(
-            SystemSet::on_enter(AppState::Splash).with_system(setup))
+        app.add_system_set(SystemSet::on_enter(AppState::Splash).with_system(setup))
             .init_resource::<SplashTracker>()
+            .add_system_set(SystemSet::on_update(AppState::Splash).with_system(tick))
             .add_system_set(
-                SystemSet::on_update(AppState::Splash).with_system(tick)
-            )
-            .add_system_set(
-                SystemSet::on_exit(AppState::Splash).with_system(cleanup::<CleanupMarker>)
+                SystemSet::on_exit(AppState::Splash).with_system(cleanup::<CleanupMarker>),
             );
     }
 }
@@ -21,7 +20,7 @@ struct CleanupMarker;
 
 #[derive(Default)]
 struct SplashTracker {
-    time: f32
+    time: f32,
 }
 
 pub fn load(
@@ -60,7 +59,7 @@ fn setup(
         })
         .insert(CleanupMarker);
 
-   commands
+    commands
         .spawn_bundle(NodeBundle {
             style: Style {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
@@ -112,14 +111,13 @@ fn setup(
                         font: game_assets.font.clone(),
                         font_size: text_scaler.scale(menus::DEFAULT_FONT_SIZE * 1.2),
                         color: Color::WHITE,
-                    })
-                    .with_alignment(
-                        TextAlignment {
-                            horizontal: HorizontalAlign::Center,
-                            ..Default::default()
-                        }),
+                    },
+                )
+                .with_alignment(TextAlignment {
+                    horizontal: HorizontalAlign::Center,
                     ..Default::default()
-                });
+                }),
+                ..Default::default()
             });
+        });
 }
-
