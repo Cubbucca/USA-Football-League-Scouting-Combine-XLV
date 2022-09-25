@@ -321,7 +321,7 @@ fn update_menu_buttons(
     if action_state.just_pressed(MenuAction::Down) {
         audio.play_sfx(&game_assets.blip);
         let new_selected_button = selected_button.checked_add(1).unwrap_or(0);
-        *selected_button = if new_selected_button > number_of_buttons - 1 {
+        *selected_button = if new_selected_button >= number_of_buttons {
             0
         } else {
             new_selected_button

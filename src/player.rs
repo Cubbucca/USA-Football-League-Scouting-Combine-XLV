@@ -30,15 +30,15 @@ pub struct PlayerBladeEvent {
 }
 
 pub fn handle_player_blade_event(
-    mut commands: Commands,
+    //mut commands: Commands,
     mut player_blade_event_reader: EventReader<PlayerBladeEvent>,
     mut players: Query<(&mut Player, &Transform, &AnimationLink)>,
     mut animations: Query<&mut AnimationPlayer>,
-    mut game_state: ResMut<game_state::GameState>,
+    //mut game_state: ResMut<game_state::GameState>,
     game_assets: ResMut<GameAssets>,
 ) {
     for event in player_blade_event_reader.iter() {
-        if let Ok((mut player, transform, animation_link)) = players.get_mut(event.entity) {
+        if let Ok((mut player, _transform, animation_link)) = players.get_mut(event.entity) {
             if let Some(animation_entity) = animation_link.entity {
                 let mut animation = animations.get_mut(animation_entity).unwrap();
                 animation.play(game_assets.person_dive.clone_weak());
@@ -47,20 +47,6 @@ pub fn handle_player_blade_event(
             }
             player.is_dead = true;
             player.dead_cooldown = 1.2;
-
-            //          println!("creating billboard");
-            //          commands.spawn_bundle(PbrBundle {
-            //                  mesh: game_assets.blood_mesh.clone(),
-            //                  material: game_assets.blood.material.clone(),
-            //                  transform: {
-            //                      let mut t = transform.clone();
-            //                      t.rotation = Quat::from_axis_angle(Vec3::X, (3.0 * std::f32::consts::PI) / 2.0);
-            //                      t
-            //                  },
-            //                  ..Default::default()
-            //              })
-            //              .insert(Billboard)
-            //              .insert(ingame::CleanupMarker);
         }
     }
 }
@@ -70,7 +56,7 @@ pub fn check_for_touchdown(
     game_state: Res<game_state::GameState>,
     mut touchdown_event_writer: EventWriter<game_state::TouchdownEvent>,
     mut carried_footballs: Query<(&football::CarriedFootball, &mut Visibility, &Parent)>,
-    mut game_assets: ResMut<GameAssets>,
+    game_assets: Res<GameAssets>,
     mut audio: GameAudio,
 ) {
     for (player_entity, player_transform, mut player) in &mut players {
@@ -336,7 +322,7 @@ impl PlayerBundle {
 
 fn handle_controllers(
     controllers: Res<game_controller::GameController>,
-    game_state: Res<game_state::GameState>,
+    //game_state: Res<game_state::GameState>,
     mut players: Query<(Entity, &mut ActionState<PlayerAction>), With<Player>>,
 ) {
     for (_, mut action_state) in players.iter_mut() {
@@ -409,12 +395,12 @@ pub enum Movement {
 }
 
 fn handle_input(
-    mut app_state: ResMut<State<AppState>>,
+    //mut app_state: ResMut<State<AppState>>,
     players: Query<(Entity, &ActionState<PlayerAction>, &Transform, &Player)>,
-    game_state: Res<game_state::GameState>,
+    //game_state: Res<game_state::GameState>,
     mut player_move_event_writer: EventWriter<PlayerMoveEvent>,
 ) {
-    for (entity, action_state, transform, player) in players.iter() {
+    for (entity, action_state, _transform, _player) in players.iter() {
         //println!("T: {:?}", transform.translation);
         let mut direction = direction::Direction::NEUTRAL;
 

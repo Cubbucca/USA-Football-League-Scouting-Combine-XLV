@@ -14,7 +14,7 @@ impl Plugin for OptionsMenuPlugin {
                 .with_system(game_controller::clear_presses),
         )
         .insert_resource(CurrentOption(0))
-        .insert_resource(OptionState::default())
+        .insert_resource(OptionState::initialize())
         .add_event::<OptionChangeEvent>()
         .add_system_set(
             SystemSet::on_update(AppState::Options)
@@ -82,7 +82,7 @@ fn setup(
     mut current_option: ResMut<CurrentOption>,
     text_scaler: text_size::TextScaler,
 ) {
-    current_option.0 = 0;
+    current_option.0 = 3;
 
     commands
         .spawn_bundle(Camera3dBundle {
