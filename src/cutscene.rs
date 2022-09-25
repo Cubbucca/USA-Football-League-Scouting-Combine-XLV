@@ -1847,7 +1847,7 @@ fn setup_cutscene(
                         border: UiRect::all(Val::Px(2.0)),
                         ..Default::default()
                     },
-                    color: Color::rgba(0.65, 0.65, 0.65, 0.4).into(),
+                    color: Color::rgba_u8(75, 75, 75, 75).into(),
                     ..Default::default()
                 })
                 .insert(CutsceneTextBoxContainer)
@@ -1861,7 +1861,7 @@ fn setup_cutscene(
                                 overflow: Overflow::Hidden,
                                 ..Default::default()
                             },
-                            color: Color::rgba(0.17, 0.23, 0.58, 0.4).into(),
+                            color: Color::rgba_u8(50, 75, 125, 75).into(),
 
                             ..Default::default()
                         })
@@ -2022,7 +2022,7 @@ fn handle_input(
 
     if let Ok(action_state) = action_state.get_single() {
         if action_state.just_pressed(MenuAction::Select) {
-            cutscene_state.input_cooldown = 0.5;
+            cutscene_state.input_cooldown = 0.2;
             cutscene_state.waiting_on_input = false;
             cutscene_state.cutscene_index += 1;
             // clear out existing text
