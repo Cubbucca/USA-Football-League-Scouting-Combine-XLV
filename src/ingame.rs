@@ -424,7 +424,8 @@ pub fn setup(
             })
             .insert(combine::Combine::create(game_state.is_latest))
             .insert(AnimationLink { entity: None })
-            .insert(CleanupMarker);
+            .insert(CleanupMarker)
+            .insert(Name::new("Combine"));
     }
 
     if let Some(gltf) = assets_gltf.get(&game_assets.maze.clone()) {
