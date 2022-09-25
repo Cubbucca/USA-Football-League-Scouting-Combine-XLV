@@ -362,7 +362,8 @@ pub fn setup(
                         .insert(football::CarriedFootball);
                 }
             })
-            .insert(CleanupMarker);
+            .insert(CleanupMarker)
+            .insert(Name::new("Player"));
     }
 
     if let Some(gltf) = assets_gltf.get(&game_assets.enemy.clone()) {
@@ -377,7 +378,8 @@ pub fn setup(
                 },
                 ..default()
             })
-            .insert(CleanupMarker);
+            .insert(CleanupMarker)
+            .insert(Name::new("Kicker1"));
         commands
             .spawn_bundle(SceneBundle {
                 scene: gltf.scenes[0].clone(),
@@ -388,7 +390,8 @@ pub fn setup(
                 },
                 ..default()
             })
-            .insert(CleanupMarker);
+            .insert(CleanupMarker)
+            .insert(Name::new("Kicker2"));
     }
 
     if let Some(gltf) = assets_gltf.get(&game_assets.combine.clone()) {

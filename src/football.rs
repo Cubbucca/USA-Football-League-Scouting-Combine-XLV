@@ -87,7 +87,8 @@ fn handle_launch_football_event(
                     starting_position: position,
                     current_movement_time: 0.0,
                 })
-                .insert(ingame::CleanupMarker);
+                .insert(ingame::CleanupMarker)
+                .insert(Name::new("Ball"));
         }
         if !game_state.enemies_spawned {
             spawn_enemies_event_writer.send(enemy::SpawnEnemiesEvent);

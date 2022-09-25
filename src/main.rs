@@ -3,6 +3,7 @@
 use bevy::app::AppExit;
 use bevy::asset::AssetServerSettings;
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
+use bevy::log::LogSettings;
 use bevy::prelude::*;
 use bevy::window::WindowMode;
 use bevy_inspector_egui::WorldInspectorPlugin;
@@ -45,11 +46,15 @@ const TOP_END: f32 = 20.471;
 
 fn main() {
     App::new()
-        //      .insert_resource(AssetServerSettings {
-        //          watch_for_changes: true,
-        //          ..default()
-        //      })
-        //      .add_plugin(LogDiagnosticsPlugin::default())
+            //  .insert_resource(AssetServerSettings {
+            //      watch_for_changes: true,
+            //      ..default()
+            //  })
+            //  .add_plugin(LogDiagnosticsPlugin::default())
+        .insert_resource(LogSettings {
+            filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
+            level: bevy::log::Level::DEBUG,
+        })
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_plugins(DefaultPlugins)
         .add_plugin(WorldInspectorPlugin::new())

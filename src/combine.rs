@@ -105,7 +105,8 @@ fn handle_corn_collision(
                         direction: blade_transform.right(),
                         shrink_time: 2.0,
                     })
-                    .remove::<collision::Collidable>();
+                    .remove::<collision::Collidable>()
+                    .insert(Name::new("Combine"));
                 if *sound_cooldown <= 0.0 {
                     audio.play_sfx(&game_assets.corn_harvest);
                     *sound_cooldown = 0.1;

@@ -142,7 +142,8 @@ fn handle_spawn_enemies_event(
                     })
                     .insert(Enemy::new(line_of_sight_id))
                     .insert(AnimationLink { entity: None })
-                    .insert(ingame::CleanupMarker);
+                    .insert(ingame::CleanupMarker)
+                    .insert(Name::new("Enemy"));
             }
         }
     }

@@ -405,7 +405,7 @@ fn play_cutscene(
                 }
             },
             Cutscene::Intro => match cutscene_state.cutscene_index {
-                0 => {
+                /*0 => {
                     camera.translation = Vec3::new(22.5, 1.5, 0.0);
                     camera.rotation = Quat::from_axis_angle(
                         Vec3::new(-0.034182332, -0.9987495, -0.03648749),
@@ -1059,7 +1059,7 @@ fn play_cutscene(
                     });
                     bill_animation = Some(game_assets.host_talk.clone());
                     will_animation = Some(game_assets.host_idle.clone());
-                }
+                } */
                 _ => {
                     camera.translation = Vec3::new(
                         game_camera::INGAME_CAMERA_X,

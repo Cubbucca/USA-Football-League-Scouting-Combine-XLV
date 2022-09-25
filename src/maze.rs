@@ -138,7 +138,8 @@ fn spawn_corn(
                             is_harvested: false,
                             animation_set: false,
                             random: rng.gen_range(0.2..0.5),
-                        });
+                        })
+                        .insert(Name::new("Maze"));
                 }
             }
             visibility.is_visible = false; // hide the plane underneath the corn

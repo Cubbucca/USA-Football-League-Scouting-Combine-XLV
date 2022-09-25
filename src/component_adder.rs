@@ -112,7 +112,8 @@ fn add_components(
                     })
                     .insert(other_persons::BillPerson)
                     .insert(AnimationLink { entity: None })
-                    .insert(ingame::CleanupMarker);
+                    .insert(ingame::CleanupMarker)
+                    .insert(Name::new("Bill"));
                 visibility.is_visible = false;
             }
 
@@ -140,7 +141,8 @@ fn add_components(
                     .insert(other_persons::WillPerson)
                     .insert(first_pass_layer)
                     .insert(AnimationLink { entity: None })
-                    .insert(ingame::CleanupMarker);
+                    .insert(ingame::CleanupMarker)
+                    .insert(Name::new("Will"));
                 visibility.is_visible = false;
             }
 

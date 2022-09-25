@@ -36,13 +36,20 @@ pub fn follow_player(
     players: Query<&Transform, (With<player::Player>, Without<PanOrbitCamera>)>,
     time: Res<Time>,
 ) {
-    let camera_speed = 1.2;
+    let camera_speed = 10.0;
     for mut camera_transform in cameras.iter_mut() {
         for player_transform in players.iter() {
-            camera_transform.translation.z += (player_transform.translation.z
+            /* camera_transform.translation.z += (player_transform.translation.z
                 - camera_transform.translation.z)
                 * camera_speed
-                * time.delta_seconds();
+                * time.delta_seconds(); */
+                info!("player y rotation: {:?}", player_transform.rotation.y);
+                info!("player x rotation: {:?}", player_transform.rotation.x);
+                info!("player z rotation: {:?}", player_transform.rotation.z);
+                camera_transform.translation.z += 
+                ((player_transform.translation.z - (player_transform.rotation.y * 5.0)) - camera_transform.translation.z)
+                * camera_speed
+                * time.delta_seconds(); 
         }
     }
 }
