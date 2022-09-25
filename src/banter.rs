@@ -207,11 +207,11 @@ fn generate_banter(game_assets: &GameAssets) -> Vec<Banter> {
         Banter {
             texts: vec![
                 will_talk("Oh Bill, how's your cat?", &game_assets),
-                bill_talk("The vet says she's great!", &game_assets),
-                bill_talk("They said she's the cutest cat.", &game_assets),
+                bill_talk_r("The vet says she's great!", &game_assets),
+                bill_talk_r("They said she's the cutest cat.", &game_assets),
                 will_talk("Yeah, she's a cute cat.", &game_assets),
-                bill_talk("No, Will..", &game_assets),
-                bill_talk("They said CUTEST.", &game_assets),
+                bill_talk_r("No, Will..", &game_assets),
+                bill_talk_r("They said CUTEST.", &game_assets),
                 will_silent("...", &game_assets),
             ],
         },
